@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Кредитный калькулятор</title>
+</head>
+
+<body>
+    <ul>
+        <li>если клиенту нет 18 лет, то кредит он не получит</li>
+        <li>если клиенту от 18 до 21, то он может получить максимум 50000</li>
+        <li>если клиенту от 22 до 35, то он сможет получить максимум 400000</li>
+        <li>если клиенту от 36 до 65, то ему одобрят максимум 1000000</li>
+        <li>кредит могут выдавать суммами кратными 10000.</li>
+    </ul>
+    <button onclick="calculateCredit()">Запросить кредит</button>
+
+    <script>
+        function roundDownToNearestThousand(value) { 
+            return Math.floor(value / 1000) * 1000; // Округляем вниз
+        }        
+
+        const getCreditSum = function(maxSum) {
+            let sumCredit = +prompt(`Введите желаемую сумму (максимум: ${maxSum} рублей)\nСумма должна быть кратна 1000:`); // Запрашиваем сумму кредита
+
+            if (sumCredit < 1000 || sumCredit > maxSum) {
+                alert(`Сумма должна быть в пределах от 1000 до ${maxSum}. Пожалуйста, попробуйте снова.`);
+                return null; // Возвращаем null, если сумма недопустима
+            }
+            
+            if (sumCredit % 1000 !== 0) { // Проверка на кратность 1000
+                const roundedSum = roundDownToNearestThousand(sumCredit);
+                alert(`Сумма должна быть кратна 1000. Мы можем выдать вам ${roundedSum} рублей.`);
+                
+                // Подтверждение от пользователя
+                const confirmCredit = confirm(`Подтвердите ваше согласие на оформление кредита на сумму ${roundedSum} рублей`);
+                if (confirmCredit) {
+                    alert(`Поздравляем! Вы оформили кредит на сумму ${roundedSum} рублей.`);
+                    alert(`Пожалуйста, посетите отделение нашего банка для получения денежных средств!`); // Новое уведомление
+                    return roundedSum; // Возвращаем округленную сумму
+                } else {
+                    return null; // Если пользователь не согласен
+                }
+            } 
+            
+            alert(`Поздравляем! Вы оформили кредит на сумму ${sumCredit} рублей.`); // Уведомление об успешном оформлении
+            alert(`Пожалуйста, посетите отделение нашего банка для получения денежных средств!`); // Новое уведомление
+            return sumCredit; // Возвращаем введенную сумму
+        };
+
+        const calculateCredit = () => {
+            const yearBirth = +prompt("Введите ваш возраст:");
+            let desiredSum; // Объявляем переменную для желаемой суммы
+
+            if (yearBirth < 18) {
+                alert("Если клиенту нет 18 лет, то кредит он не получит");
+            } else if (yearBirth < 22) {
+                alert("Вы можете получить максимум 50000");
+                desiredSum = getCreditSum(50000); // Получаем сумму кредита от пользователя
+            } else if (yearBirth < 35) {
+                alert("Вы можете получить максимум 400000");
+                desiredSum = getCreditSum(400000); // Получаем сумму кредита от пользователя
+            } else if (yearBirth < 65) {
+                alert("Вы можете получить максимум 1000000");
+                desiredSum = getCreditSum(1000000); // Получаем сумму кредита от пользователя
+            } else {
+                alert("Вам кредит, мы выдать не сможем!");
+            }
+
+            console.log(desiredSum); // Выводим желаемую сумму
+        };
+    </script>
+</body>
+
+</html>
